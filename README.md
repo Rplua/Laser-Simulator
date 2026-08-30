@@ -38,10 +38,15 @@ Laser Device Simulator
 
 ## Current status
 
-**Phase 1 — Domain and state-machine design**
+**Phase 2 — Device simulator completed**
 
-No application code has been created yet. The first deliverable is the domain
-design described in [the project roadmap](docs/ROADMAP.md).
+The domain model and deterministic laser simulator are implemented. The
+simulator includes explicit state transitions, power ramping, current and
+temperature evolution, cooling, safety faults, recovery rules and validated
+state snapshots. Its behaviour is covered by 36 passing unit-test cases.
+
+The next milestone is **Phase 3 — TCP protocol design**, described in
+[the project roadmap](docs/ROADMAP.md).
 
 ## Working method
 

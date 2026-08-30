@@ -12,5 +12,7 @@ class TargetPowerNotConfiguredError(LaserDomainError):
 
 class InvalidTargetPowerError(LaserDomainError):
     """La potencia indicada está fuera del rango permitido."""
+
+
 class UnsafeRecoveryError(LaserDomainError):
-    """No se puede recuperar la maquina"""
+    """No se puede recuperar la máquina mientras las mediciones sean inseguras."""

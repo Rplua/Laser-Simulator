@@ -22,7 +22,7 @@ def test_new_laser_has_expected_initial_snapshot() -> None:
     assert laser_snapshot.current_ma == 0
     assert laser_snapshot.fault_reason is None
 
-def test_laser_cannot_arm_without_target_power()-> None:
+def test_laser_cannot_arm_without_target_power() -> None:
     laser = Laser()
     with pytest.raises(TargetPowerNotConfiguredError):
         laser.arm()
@@ -218,7 +218,7 @@ def test_recover_from_idle_is_rejected() -> None:
 def test_temperature_at_fault_threshold_enters_fault() -> None:
     laser = Laser()
     laser.set_target_power(80)
-    laser.update_measurements(60,20,20)
+    laser.update_measurements(60, 20, 20)
     laser_snapshot = laser.snapshot()
     assert laser_snapshot.state is LaserState.FAULT
     assert laser_snapshot.fault_reason is FaultReason.OVER_TEMPERATURE
@@ -377,6 +377,7 @@ def test_tick_increases_temperature_while_running() -> None:
     assert laser_snapshot.current_ma == 80
     assert laser_snapshot.temperature_c == pytest.approx(25.1)
 
+
 def test_tick_cools_non_running_laser_toward_ambient_temperature() -> None:
     laser = Laser()
     laser.update_measurements(
@@ -392,3 +393,60 @@ def test_tick_cools_non_running_laser_toward_ambient_temperature() -> None:
     assert laser_snapshot.temperature_c == pytest.approx(28)
     assert laser_snapshot.actual_power_mw == 0
     assert laser_snapshot.current_ma == 0
+
+
+def test_tick_enters_over_temperature_fault() -> None:
+    laser = Laser()
+    laser.set_target_power(60)
+    laser.arm()
+    laser.start()
+
+    for _ in range(117):
+        laser.tick(1)
+
+    laser_snapshot = laser.snapshot()
+    assert laser_snapshot.state is LaserState.RUNNING
+    assert laser_snapshot.temperature_c < 60
+    assert laser_snapshot.fault_reason is None
+
+    laser.tick(1)
+
+    laser_snapshot = laser.snapshot()
+    assert laser_snapshot.state is LaserState.FAULT
+    assert laser_snapshot.fault_reason is FaultReason.OVER_TEMPERATURE
+    assert laser_snapshot.target_power_mw == 60
+    assert laser_snapshot.actual_power_mw == 0
+    assert laser_snapshot.current_ma == 0
+
+
+def test_tick_does_not_cool_below_ambient_temperature() -> None:
+    laser = Laser()
+    laser.update_measurements(
+        temperature_c=25.5,
+        current_ma=0,
+        actual_power_mw=0,
+    )
+    for _ in range(10):
+        laser.tick(1)
+
+    laser_snapshot = laser.snapshot()
+    assert laser_snapshot.temperature_c == 25
+    assert laser_snapshot.current_ma == 0
+    assert laser_snapshot.actual_power_mw == 0
+
+
+@pytest.mark.parametrize("value", [-1, 0])
+def test_tick_rejects_non_positive_delta_without_changing_state(
+    value: float,
+) -> None:
+    laser = Laser()
+    laser.set_target_power(50)
+    laser.arm()
+    laser.start()
+    before_snapshot = laser.snapshot()
+
+    with pytest.raises(ValueError):
+        laser.tick(value)
+
+    after_snapshot = laser.snapshot()
+    assert after_snapshot == before_snapshot
