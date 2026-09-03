@@ -1,6 +1,7 @@
 import pytest
 
 from simulated_device.protocol.constants import (
+    BYTE_ORDER,
     HEADER_SIZE_BYTES,
     MAX_PAYLOAD_SIZE_BYTES,
 )
@@ -70,3 +71,33 @@ def test_frame_parser_extracts_multiple_frames_from_one_chunk() -> None:
     total = frist_frame + second_frame
     result = frame_parser.feed(total)
     assert result == [b"first", b"second"]
+
+def test_frame_parser_extracts_complete_frames_and_keeps_partial_frame() -> None:
+    first_frame = encode_frame(b"first")
+    second_frame = encode_frame(b"second")
+    third_frame = encode_frame(b"third")
+    frame_parser = FrameParser()
+
+    first_result = frame_parser.feed(
+        first_frame + second_frame + third_frame[:6]
+    )
+    assert first_result == [b"first", b"second"]
+
+    second_result = frame_parser.feed(third_frame[6:])
+    assert second_result == [b"third"]
+
+
+@pytest.mark.parametrize(
+    "payload_size",
+    [0, MAX_PAYLOAD_SIZE_BYTES + 1],
+)
+def test_frame_parser_rejects_invalid_payload_size(payload_size: int) -> None:
+    frame_parser = FrameParser()
+    invalid_header = payload_size.to_bytes(
+        length=HEADER_SIZE_BYTES,
+        byteorder=BYTE_ORDER,
+        signed=False,
+    )
+
+    with pytest.raises(InvalidFrameLengthError):
+        frame_parser.feed(invalid_header)

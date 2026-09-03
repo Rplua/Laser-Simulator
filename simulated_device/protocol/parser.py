@@ -1,4 +1,5 @@
-from simulated_device.protocol.constants import HEADER_SIZE_BYTES, BYTE_ORDER
+from simulated_device.protocol.constants import HEADER_SIZE_BYTES, BYTE_ORDER, MAX_PAYLOAD_SIZE_BYTES
+from simulated_device.protocol.exceptions import InvalidFrameLengthError
 
 
 class FrameParser:
@@ -7,26 +8,33 @@ class FrameParser:
 
     def feed(self, data: bytes) -> list[bytes]:
         self._buffer.extend(data)
+        payloads: list[bytes] = []
 
-        if len(self._buffer) < HEADER_SIZE_BYTES:
-            return []
+        while True:
+            if len(self._buffer) < HEADER_SIZE_BYTES:
+                break
 
-        header: bytes = bytes(self._buffer[:HEADER_SIZE_BYTES])
+            header: bytes = bytes(self._buffer[:HEADER_SIZE_BYTES])
 
+            payload_size: int = int.from_bytes(
+                header,
+                byteorder=BYTE_ORDER,
+                signed=False,
+            )
 
-        payload_size: int = int.from_bytes(
-            header,
-            byteorder=BYTE_ORDER,
-            signed=False,
-        )
-        frame_size: int = HEADER_SIZE_BYTES + payload_size
+            if payload_size == 0 or payload_size > MAX_PAYLOAD_SIZE_BYTES:
+                raise InvalidFrameLengthError
 
-        if len(self._buffer) < frame_size:
-            return []
+            frame_size: int = HEADER_SIZE_BYTES + payload_size
 
-        payload: bytes = bytes(self._buffer[HEADER_SIZE_BYTES:frame_size])
-        del self._buffer[:frame_size]
-        return [payload]
+            if len(self._buffer) < frame_size:
+                break
+
+            payload: bytes = bytes(self._buffer[HEADER_SIZE_BYTES:frame_size])
+            del self._buffer[:frame_size]
+            payloads.append(payload)
+
+        return payloads
 
 
 
