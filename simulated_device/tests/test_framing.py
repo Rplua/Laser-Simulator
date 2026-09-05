@@ -1,13 +1,15 @@
 import pytest
 
-from simulated_device.protocol.constants import (
+from simulated_device.protocol.constants.protocol_constants import (
     BYTE_ORDER,
     HEADER_SIZE_BYTES,
     MAX_PAYLOAD_SIZE_BYTES,
 )
-from simulated_device.protocol.exceptions import InvalidFrameLengthError
-from simulated_device.protocol.framing import encode_frame
-from simulated_device.protocol.parser import FrameParser
+from simulated_device.protocol.exceptions.protocol_exceptions import (
+    InvalidFrameLengthError,
+)
+from simulated_device.protocol.framing.encoder import encode_frame
+from simulated_device.protocol.framing.parser import FrameParser
 
 
 def test_encode_frame_prefixes_payload_with_length() -> None:

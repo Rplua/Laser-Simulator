@@ -1,5 +1,11 @@
-from simulated_device.protocol.constants import HEADER_SIZE_BYTES, BYTE_ORDER, MAX_PAYLOAD_SIZE_BYTES
-from simulated_device.protocol.exceptions import InvalidFrameLengthError
+from simulated_device.protocol.constants.protocol_constants import (
+    BYTE_ORDER,
+    HEADER_SIZE_BYTES,
+    MAX_PAYLOAD_SIZE_BYTES,
+)
+from simulated_device.protocol.exceptions.protocol_exceptions import (
+    InvalidFrameLengthError,
+)
 
 
 class FrameParser:
@@ -14,9 +20,8 @@ class FrameParser:
             if len(self._buffer) < HEADER_SIZE_BYTES:
                 break
 
-            header: bytes = bytes(self._buffer[:HEADER_SIZE_BYTES])
-
-            payload_size: int = int.from_bytes(
+            header = bytes(self._buffer[:HEADER_SIZE_BYTES])
+            payload_size = int.from_bytes(
                 header,
                 byteorder=BYTE_ORDER,
                 signed=False,
@@ -25,17 +30,13 @@ class FrameParser:
             if payload_size == 0 or payload_size > MAX_PAYLOAD_SIZE_BYTES:
                 raise InvalidFrameLengthError
 
-            frame_size: int = HEADER_SIZE_BYTES + payload_size
+            frame_size = HEADER_SIZE_BYTES + payload_size
 
             if len(self._buffer) < frame_size:
                 break
 
-            payload: bytes = bytes(self._buffer[HEADER_SIZE_BYTES:frame_size])
+            payload = bytes(self._buffer[HEADER_SIZE_BYTES:frame_size])
             del self._buffer[:frame_size]
             payloads.append(payload)
 
         return payloads
-
-
-
-

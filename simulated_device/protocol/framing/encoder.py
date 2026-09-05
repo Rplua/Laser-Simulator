@@ -1,9 +1,11 @@
-from simulated_device.protocol.constants import (
+from simulated_device.protocol.constants.protocol_constants import (
     BYTE_ORDER,
     HEADER_SIZE_BYTES,
     MAX_PAYLOAD_SIZE_BYTES,
 )
-from simulated_device.protocol.exceptions import InvalidFrameLengthError
+from simulated_device.protocol.exceptions.protocol_exceptions import (
+    InvalidFrameLengthError,
+)
 
 
 def encode_frame(payload: bytes) -> bytes:

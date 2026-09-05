@@ -1,7 +1,7 @@
 import pytest
 
 from simulated_device.laser.enums.fault_reason import FaultReason
-from simulated_device.laser.laser.exceptions import (
+from simulated_device.laser.exceptions.laser_exceptions import (
     InvalidStateTransitionError,
     InvalidTargetPowerError,
     TargetPowerNotConfiguredError,

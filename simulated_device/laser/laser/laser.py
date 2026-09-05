@@ -1,4 +1,4 @@
-from simulated_device.laser.constants.constants import (
+from simulated_device.laser.constants.laser_constants import (
     AMBIENT_TEMPERATURE_C,
     COOLING_RATE_C_PER_SECOND,
     CURRENT_MA_PER_MW,
@@ -13,7 +13,7 @@ from simulated_device.laser.constants.constants import (
 )
 from simulated_device.laser.enums.fault_reason import FaultReason
 from simulated_device.laser.enums.laser_states import LaserState
-from simulated_device.laser.laser.exceptions import (
+from simulated_device.laser.exceptions.laser_exceptions import (
     InvalidStateTransitionError,
     InvalidTargetPowerError,
     TargetPowerNotConfiguredError,
