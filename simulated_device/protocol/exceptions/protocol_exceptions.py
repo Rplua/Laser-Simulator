@@ -5,5 +5,26 @@ class ProtocolError(Exception):
 class InvalidFrameLengthError(ProtocolError):
     """The frame declares an invalid payload length."""
 
+
 class InvalidMessageError(ProtocolError):
-    """The message payload is not valid JSON or violates the protocol contract."""
+    """Base error for an invalid protocol message."""
+
+
+class InvalidEncodingError(InvalidMessageError):
+    """The payload is not valid UTF-8."""
+
+
+class InvalidJsonError(InvalidMessageError):
+    """The UTF-8 payload is not a valid JSON document."""
+
+
+class InvalidRequestError(InvalidMessageError):
+    """The JSON document does not satisfy the request contract."""
+
+
+class UnsupportedProtocolVersionError(InvalidMessageError):
+    """The request uses a protocol version that is not supported."""
+
+
+class UnsupportedCommandError(InvalidMessageError):
+    """The request names a command that is not supported."""

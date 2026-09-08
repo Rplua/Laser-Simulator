@@ -220,3 +220,20 @@ la misma conexión.
 Si la conexión termina mientras existe un frame incompleto, el fragmento se
 descarta y se registra para diagnóstico. Nunca debe intentarse interpretar un
 payload antes de haber recibido todos sus bytes.
+
+## Estado de implementación
+
+La Fase 3 implementa el protocolo sin depender todavía de sockets reales. El
+código actual proporciona:
+
+- Encoder con encabezado *big-endian* de cuatro bytes y parser con buffer.
+- Validación estricta del sobre de petición y del payload de cada comando.
+- Errores separados para codificación, JSON, contrato, versión y comando.
+- Despacho de comandos al dominio sin duplicar sus reglas de seguridad.
+- Respuestas de éxito y error relacionadas mediante `request_id`.
+- Serialización JSON y framing de la respuesta, listos para escribir en TCP.
+- Un procesador integral que convierte un payload completo de petición en un
+  frame completo de respuesta.
+
+El servidor TCP, el ciclo de vida de los sockets, los timeouts y el driver
+cliente pertenecen deliberadamente a la Fase 4.

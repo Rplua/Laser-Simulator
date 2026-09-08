@@ -14,3 +14,8 @@ def test_set_target_power_payload_rejects_unknown_fields() -> None:
 
     with pytest.raises(ValidationError):
         SetTargetPowerPayload.model_validate(payload)
+
+
+def test_set_target_power_payload_rejects_numeric_string() -> None:
+    with pytest.raises(ValidationError):
+        SetTargetPowerPayload.model_validate({"target_power_mw": "52"})

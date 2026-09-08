@@ -6,7 +6,7 @@ from simulated_device.laser.laser.laser import Laser
 from simulated_device.laser.model.laser_snapshot import LaserSnapshot
 from simulated_device.protocol.enums.command_name import CommandName
 from simulated_device.protocol.exceptions.protocol_exceptions import (
-    InvalidMessageError,
+    InvalidRequestError,
 )
 from simulated_device.protocol.model.command_request import CommandRequest
 from simulated_device.protocol.model.empty_payload import EmptyPayload
@@ -42,7 +42,7 @@ class CommandDispatcher:
         try:
             handler(command.payload)
         except ValidationError as error:
-            raise InvalidMessageError(
+            raise InvalidRequestError(
                 f"Invalid payload for command '{command.command.value}'"
             ) from error
 

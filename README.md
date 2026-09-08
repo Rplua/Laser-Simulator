@@ -38,15 +38,21 @@ Laser Device Simulator
 
 ## Current status
 
-**Phase 2 — Device simulator completed**
+**Phase 3 — TCP application protocol completed**
 
-The domain model and deterministic laser simulator are implemented. The
-simulator includes explicit state transitions, power ramping, current and
-temperature evolution, cooling, safety faults, recovery rules and validated
-state snapshots. Its behaviour is covered by 36 passing unit-test cases.
+The domain model and deterministic laser simulator are implemented together
+with a documented binary framing protocol. The protocol handles fragmented and
+coalesced TCP data, validates JSON command contracts, dispatches commands to
+the laser, correlates responses through request identifiers and returns framed
+success or error responses.
 
-The next milestone is **Phase 3 — TCP protocol design**, described in
+The current implementation is covered by 96 passing automated tests. Actual
+network sockets are intentionally not part of this milestone. The next step is
+**Phase 4 — Device TCP server and Python driver**, described in
 [the project roadmap](docs/ROADMAP.md).
+
+The asynchronous networking concepts used by the device server are explained
+in [the asyncio and TCP server guide](docs/ASYNCIO_TCP_SERVER.md).
 
 ## Working method
 

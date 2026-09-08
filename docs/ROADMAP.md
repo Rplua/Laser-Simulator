@@ -21,6 +21,8 @@ solución completa únicamente cuando exista un bloqueo real.
 
 ## FASE 1 — Dominio y máquina de estados
 
+**Estado: completada.**
+
 ### Objetivo
 
 Diseñar el comportamiento del dispositivo sin pensar todavía en sockets,
@@ -35,7 +37,7 @@ FastAPI, React o Docker.
 
 ### Comandos del dominio
 
-- Armar el dispositivo. Done 
+- Armar el dispositivo.
 - Desarmar el dispositivo.
 - Iniciar la emisión.
 - Detener la emisión.
@@ -85,6 +87,8 @@ Crear `docs/DOMAIN_DESIGN.md` con:
 
 ## FASE 2 — Simulador del dispositivo
 
+**Estado: completada.**
+
 ### Objetivo
 
 Implementar en Python el dominio diseñado en la fase anterior, todavía sin
@@ -108,6 +112,8 @@ comunicación de red.
 ---
 
 ## FASE 3 — Protocolo TCP
+
+**Estado: completada.**
 
 ### Objetivo
 
@@ -133,6 +139,8 @@ mediciones entre procesos mediante TCP.
 ---
 
 ## FASE 4 — Servidor del dispositivo y driver Python
+
+**Estado: siguiente fase.**
 
 ### Objetivo
 
@@ -280,7 +288,7 @@ entrevista técnica.
 - Explicación de decisiones y limitaciones.
 - Guion breve para presentar el proyecto en una entrevista.
 
-### Criterios de aceptación
+### Criterios de aceptaciónå
 
 - Las pruebas, lint y builds terminan correctamente.
 - No quedan procesos, sockets o tareas abandonados.
