@@ -223,8 +223,8 @@ payload antes de haber recibido todos sus bytes.
 
 ## Estado de implementación
 
-La Fase 3 implementa el protocolo sin depender todavía de sockets reales. El
-código actual proporciona:
+Las fases 3 y 4 implementan el protocolo y su transporte mediante sockets TCP
+reales. El código actual proporciona:
 
 - Encoder con encabezado *big-endian* de cuatro bytes y parser con buffer.
 - Validación estricta del sobre de petición y del payload de cada comando.
@@ -234,6 +234,11 @@ código actual proporciona:
 - Serialización JSON y framing de la respuesta, listos para escribir en TCP.
 - Un procesador integral que convierte un payload completo de petición en un
   frame completo de respuesta.
+- Un servidor asíncrono con un parser independiente para cada conexión.
+- Un driver de alto nivel con timeouts, validación de respuestas y correlación
+  mediante `request_id`.
+- Reconexión explícita y limitada, sin repetición automática de comandos.
+- Cierre controlado de sockets y tareas durante el apagado.
 
-El servidor TCP, el ciclo de vida de los sockets, los timeouts y el driver
-cliente pertenecen deliberadamente a la Fase 4.
+La arquitectura y el recorrido completo se describen en
+[la documentación de la fase 4](PHASE_4_TCP_SERVER_AND_DRIVER.md).

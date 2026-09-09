@@ -22,6 +22,10 @@ class InvalidRequestError(InvalidMessageError):
     """The JSON document does not satisfy the request contract."""
 
 
+class InvalidResponseError(InvalidMessageError):
+    """The JSON document does not satisfy the response contract."""
+
+
 class UnsupportedProtocolVersionError(InvalidMessageError):
     """The request uses a protocol version that is not supported."""
 

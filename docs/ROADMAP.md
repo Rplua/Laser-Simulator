@@ -140,7 +140,7 @@ mediciones entre procesos mediante TCP.
 
 ## FASE 4 — Servidor del dispositivo y driver Python
 
-**Estado: siguiente fase.**
+**Estado: completada.**
 
 ### Objetivo
 
@@ -166,6 +166,8 @@ proceso mediante TCP.
 ---
 
 ## FASE 5 — Servicio FastAPI
+
+**Estado: siguiente fase.**
 
 ### Objetivo
 
