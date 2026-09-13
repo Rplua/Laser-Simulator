@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from control_service.api.routes.health import router as health_router
 from device_driver.laser_driver import LaserDriver
-
+from control_service.api.routes.laser import router as laser_router
 
 
 @asynccontextmanager
@@ -24,4 +24,5 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="Laser Control Service", lifespan=lifespan)
 
-app.include_router(health_router, )
+app.include_router(health_router)
+app.include_router(laser_router)
