@@ -1,27 +1,9 @@
-from collections.abc import Iterator
 
-import pytest
 from fastapi import FastAPI
-from control_service.api.routes.health import router as health_router
 from fastapi.testclient import TestClient
 from control_service.api.dependencies import get_laser_driver
+from control_service.tests.fakes.fake_laser_driver import FakeLaserDriver
 
-
-class FakeLaserDriver:
-    def __init__(self, is_connected: bool) -> None:
-        self.is_connected = is_connected
-
-@pytest.fixture
-def api_app() -> FastAPI:
-    app = FastAPI()
-    app.include_router(health_router)
-    return app
-
-
-@pytest.fixture
-def client(api_app: FastAPI) -> Iterator[TestClient]:
-    with TestClient(api_app) as client:
-        yield client
 
 
 def test_health(client: TestClient) -> None:
